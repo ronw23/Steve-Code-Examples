@@ -54,7 +54,7 @@ end
 
 # Print some stuff from the input XML file
 uid = nil   # Declare in top scope
-ind = 2     # Spaced to indent
+ind = 2     # Spaces to indent
 XMLReader.each_in_file(MASTER_XML_FILE) do |node|
         
     # This is a helper for getting elment content
