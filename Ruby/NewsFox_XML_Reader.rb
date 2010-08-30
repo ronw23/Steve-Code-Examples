@@ -30,7 +30,7 @@ class String
 end
 
 # Extend the Nokogiri reader class
-class Nokogiri::XML::Reader
+class XMLReader < Nokogiri::XML::Reader
     def element?
         # This method exists in git but not in my 1.4.3.1 copy
         # True when an element is opening (as in <element>)
@@ -40,56 +40,54 @@ class Nokogiri::XML::Reader
         # True on closing elements (as in <\element>)
         node_type == Nokogiri::XML::Node::ELEMENT_DECL
     end
+    def XMLReader.each_in_file(file_name)
+        if File.exists? file_name
+            File.open file_name, 'r' do |f|
+                reader = from_io(f)
+                reader.each do |node|
+                    yield node
+                end
+            end
+        end
+    end
 end
 
 # Print some stuff from the input XML file
 uid = nil   # Declare in top scope
 ind = 2     # Spaced to indent
-if File.exists? MASTER_XML_FILE
-    File.open MASTER_XML_FILE, 'r' do |f|
-        reader = Nokogiri::XML::Reader.from_io(f)
-        reader.each do |node|
+XMLReader.each_in_file(MASTER_XML_FILE) do |node|
         
-            # This is a helper for getting elment content
-            def get_inside(node)
-                node.inner_xml.strip_cdata
-            end
-
-            # Print out info as elements are encountered
-            # Or store state for next section
-            case node.name
-            when 'url'
-                puts get_inside(node)
-            when 'dname'
-                puts ' ' * ind + 'Name: ' + get_inside(node)[0..60]
-            when 'home'
-                puts ' ' * ind + 'Home: ' + get_inside(node)
-            when 'lastUpdate'
-                puts ' ' * ind + 'Last Update: ' + get_inside(node)
-            when 'uid'
-                uid = node.inner_xml
-            end if node.element?
-
-            # Print out info as the <\feed> element is closing
-            if node.name == 'feed' and node.element_decel?
-                child_xml_file_name = WORKING_DIR + '\\' + uid + '.xml'
-
-                if File.exists? child_xml_file_name
-                    File.open child_xml_file_name, 'r' do |cf|
-                        child_reader = Nokogiri::XML::Reader.from_io(cf)
-
-                        child_reader.each do |child_node|
-                            case child_node.name
-                            when 'title'
-                                puts ' ' * ind + 'Post: ' + get_inside(child_node)[0..60]
-                            end if child_node.element?
-                        end
-                    end
-                end
-
-            end
-        end
+    # This is a helper for getting elment content
+    def get_inside(node)
+        node.inner_xml.strip_cdata
     end
-else
-    puts 'Could not find master.xml at "' + WORKING_DIR + '"'
+
+    # Print out info as elements are encountered
+    # Or store state for next section
+    case node.name
+    when 'url'
+        puts get_inside(node)
+    when 'dname'
+        puts ' ' * ind + 'Name: ' + get_inside(node)[0..60]
+    when 'home'
+        puts ' ' * ind + 'Home: ' + get_inside(node)
+    when 'lastUpdate'
+        puts ' ' * ind + 'Last Update: ' + get_inside(node)
+    when 'uid'
+        uid = node.inner_xml
+    end if node.element?
+
+    # Print out info as the <\feed> element is closing
+    if node.name == 'feed' and node.element_decel?
+        child_xml_file_name = WORKING_DIR + '\\' + uid + '.xml'
+
+        XMLReader.each_in_file(child_xml_file_name) do |child_node|
+            case child_node.name
+            when 'title'
+                puts ' ' * ind + 'Post: ' + get_inside(child_node)[0..60]
+            end if child_node.element?
+        end
+
+    end
+
 end
