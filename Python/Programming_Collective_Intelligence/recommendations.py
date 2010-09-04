@@ -32,3 +32,35 @@ def sim_distance(prefs, person1, person2):
     else:
         return 1 / (1 + sqrt(sum_of_squares))
 
+
+def sim_pearson(prefs, person1, person2):
+    # Get the list of mutually rated items
+    si={}
+    for item in prefs[person1]:
+        for item in prefs[person2]:
+            si[item] = 1
+
+    # Find the number of elements
+    n = len(si)
+    
+    # If they have no ratings in common, return 0
+    if n == 0:
+        return 0
+        
+    # Add p all the preferences
+    sum1 = sum([prefs[person1][it] for it in si])
+    sum2 = sum([prefs[person2][it] for it in si])
+
+    # Sum up the squares
+    sum1Sq = sum([pow(prefs[person1][it], 2) for it in si])
+    sum2Sq = sum([pow(prefs[person2][it], 2) for it in si])
+    
+    # Sum up the products
+    pSum = sum([prefs[person1][it] * prefs[person2][it] for it in si])
+    
+    # Calculate Pearson Score
+    num = pSum - (sum1 * sum2 / n)
+    den = sqrt((sum1Sq - pow(sum1, 2) / n) * (sum2Sq - pow(sum2, 2) / n))
+    res = num / den
+    
+    return res
