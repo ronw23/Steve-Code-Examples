@@ -34,8 +34,6 @@ def sim_distance(prefs, person1, person2):
 
 
 def sim_pearson(prefs, person1, person2):
-    # Get the list of mutually rated items
-    si = []
     cntr = 0
     sum1 = sum2 = sum1Sq = sum2Sq = pSum = 0
 
