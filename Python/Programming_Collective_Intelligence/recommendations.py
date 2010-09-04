@@ -22,7 +22,6 @@ critics={'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
 from math import sqrt
 
 def sim_distance(prefs, person1, person2):
-    si = dict()
     sum_of_squares = 0
     for item in prefs[person1]:
         if item in prefs[person2]:
