@@ -19,3 +19,16 @@ critics={'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
 'Toby': {'Snakes on a Plane':4.5,'You, Me and Dupree':1.0,'Superman Returns':4.0}}
 
 
+from math import sqrt
+
+def sim_distance(prefs, person1, person2):
+    si = dict()
+    sum_of_squares = 0
+    for item in prefs[person1]:
+        if item in prefs[person2]:
+            sum_of_squares += pow(prefs[person1][item] - prefs[person2][item], 2)
+    if sum_of_squares == 0:
+        return 0
+    else:
+        return 1 / (1 + sqrt(sum_of_squares))
+
