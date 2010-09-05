@@ -33,8 +33,7 @@ def sim_distance(prefs, person1, person2):
 
 
 def sim_pearson(prefs, person1, person2):
-    cntr = 0
-    sum1 = sum2 = sum1Sq = sum2Sq = pSum = 0
+    cntr = sum1 = sum2 = sum1Sq = sum2Sq = pSum = 0
 
     for item in prefs[person1]:   
         if item in prefs[person2]:
