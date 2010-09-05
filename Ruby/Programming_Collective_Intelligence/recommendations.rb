@@ -50,7 +50,6 @@ module Recommendations
         end
     end
 
-
     def sim_pearson(prefs, person1, person2)
         cntr = sum1 = sum2 = sum1Sq = sum2Sq = pSum = 0
         
@@ -82,5 +81,15 @@ module Recommendations
             den = Math.sqrt((sum1Sq - (sum1 ** 2) / cntr) * (sum2Sq - (sum2 ** 2) / cntr))
             num / den
         end
+    end
+
+    def top_matches(prefs, person, n=5, similarity=method(:sim_pearson))
+        scores = []
+        prefs.each_key do |other|
+            scores << [similarity.call(prefs, person, other), other] if other != person
+        end
+        scores.sort!
+        scores.reverse!
+        return scores.slice(0...n)
     end
 end
