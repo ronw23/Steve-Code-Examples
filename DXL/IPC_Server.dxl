@@ -1,0 +1,31 @@
+IPC ipc = server 5093
+string request, response
+bool shutdown = false
+
+while (!shutdown)
+{
+     if (accept(ipc))
+     {
+          while (recv(ipc, request))
+          {
+               print "request: " request "\n"
+
+               if (request=="shutdown_")
+               {
+                    shutdown = true
+                    break
+               }
+
+               if (request=="quit_")
+               {
+                    break
+               }
+
+               response = eval_(request)
+               send(ipc, response)
+          } // while (recv
+
+          disconnect(ipc)
+
+     } // if (accept
+} // while
