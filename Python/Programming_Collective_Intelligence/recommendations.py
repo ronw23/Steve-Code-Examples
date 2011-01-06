@@ -22,14 +22,14 @@ critics={'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
 from math import sqrt
 
 def sim_distance(prefs, person1, person2):
-    sum_of_squares = 0
+    sum_of_squares = 0.0
     for item in prefs[person1]:
         if item in prefs[person2]:
             sum_of_squares += pow(prefs[person1][item] - prefs[person2][item], 2)
-    if sum_of_squares == 0:
-        return 0
+    if sum_of_squares == 0.0:
+        return 0.0
     else:
-        return 1 / (1 + sqrt(sum_of_squares))
+        return 1.0 / (1.0 + sqrt(sum_of_squares))
 
 
 def sim_pearson(prefs, person1, person2):
@@ -70,3 +70,10 @@ def topMatches(prefs, person, n=5, similarity=sim_pearson):
     scores.sort()
     scores.reverse()
     return scores[0:n]
+    
+    
+if __name__ == "__main__":
+    person1 = "Lisa Rose"
+    person2 = "Toby"
+    print "This is a test of \"sim_distance\" for %s and %s: " % (person1, person2),
+    print sim_distance(critics, person1, person2)
