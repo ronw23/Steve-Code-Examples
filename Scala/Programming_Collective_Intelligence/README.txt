@@ -23,6 +23,4 @@ are Copyright 2010 Stephen Sloan.
 
 Code within the Programming Collective Intelligence folder that is
 written by Stephen Sloan is free software that you can redistribute 
-and/or modify under the terms of the GNU General Public License 
-as published by the Free Software Foundation, either version 2 of
-the License, or (at your option) any later version.
+and/or modify under the terms as the O'Reilly license.
