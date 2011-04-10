@@ -1,0 +1,152 @@
+const int iDOUBLE_STACK_DEFAULT_INIT_SIZE = 100
+
+Array aryDOUBLE_STACK = null
+int iDOUBLE_STACK_SIZE = 0
+
+void arysDoubleStackInit__(int iXSize)
+{
+    aryDOUBLE_STACK = create(iXSize, 2)
+} // arysDoubleStackInit__()
+
+void arysDoubleStackClean__()
+{
+    if (!null(aryDOUBLE_STACK))
+    {
+        delete(aryDOUBLE_STACK)
+        aryDOUBLE_STACK = null
+    } // if
+    iDOUBLE_STACK_SIZE = 0
+} // arysDoubleStackClean__()
+
+bool arysDoubleStackIsEmpty__()
+{
+    if (null(aryDOUBLE_STACK) or iDOUBLE_STACK_SIZE <= 0)
+    {
+        return true
+    }
+    else
+    {
+        return false
+    } // if
+} // arysDoubleStackIsEmpty__()
+
+void arysDoubleStackPush__(int iFirst, int iSecond)
+{
+    if (null(aryDOUBLE_STACK))
+    {
+        arysDoubleStackInit__(iDOUBLE_STACK_DEFAULT_INIT_SIZE)
+    } // if
+
+    put(aryDOUBLE_STACK, iFirst, iDOUBLE_STACK_SIZE, 0)
+    put(aryDOUBLE_STACK, iSecond, iDOUBLE_STACK_SIZE, 1)
+    iDOUBLE_STACK_SIZE++
+} // arysDoubleStackPush__(
+
+bool arysDoubleStackPop__(int &iFirst, int &iSecond)
+{
+    bool bResult = false
+
+    if (!arysDoubleStackIsEmpty__())
+    {
+        iFirst = (int get(aryDOUBLE_STACK, iDOUBLE_STACK_SIZE - 1, 0))
+        iSecond = (int get(aryDOUBLE_STACK, iDOUBLE_STACK_SIZE - 1, 1))
+        iDOUBLE_STACK_SIZE--
+
+        bResult = true
+    } // if
+
+    return bResult
+} // arysDoubleStackPop__()
+
+void arysSortArray(Array aryToSort, int iLeft, int iRight)
+{
+    bool bKeepGoingMiddleLoop, bKeepGoingInnerLoop
+    int iL2, iR2
+    string sL2Val, sR2Val, sPivotVal
+
+    arysDoubleStackPush__(iLeft, iRight)
+
+    while(!arysDoubleStackIsEmpty__())
+    {
+        arysDoubleStackPop__(iLeft, iRight)
+        bKeepGoingMiddleLoop = true
+        while(bKeepGoingMiddleLoop)
+        {
+            sPivotVal = (string get(aryToSort, ((iLeft + iRight)/ 2), 0))
+            iL2 = iLeft
+            iR2 = iRight
+
+            bKeepGoingInnerLoop = true
+            while (bKeepGoingInnerLoop)
+            {
+                while ((string get(aryToSort, iL2, 0)) < sPivotVal)
+                {
+                    iL2++
+                } // while
+
+                while ((string get(aryToSort, iR2, 0)) > sPivotVal)
+                {
+                    iR2--
+                } // while
+
+                if (iL2 <= iR2)
+                {
+                    if (iL2 != iR2)
+                    {
+                        sL2Val = (string get(aryToSort, iL2, 0))
+                        sR2Val = (string get(aryToSort, iR2, 0))
+                        put(aryToSort, sR2Val, iL2, 0)
+                        put(aryToSort, sL2Val, iR2, 0)
+                    } // if
+
+                    iL2++
+                    iR2--
+                } // if
+
+                bKeepGoingInnerLoop = (iL2 < iR2)
+            } // while (inner loop)
+
+            if (iR2 - iLeft > iRight - iL2)
+            {
+                if (iLeft < iR2)
+                {
+                    arysDoubleStackPush__(iLeft, iR2)
+                } // if
+                iLeft = iL2
+            }
+            else
+            {
+                if (iL2 < iRight)
+                {
+                    arysDoubleStackPush__(iL2, iRight)
+                } // if
+                iRight = iR2
+            } // if
+
+            bKeepGoingMiddleLoop = (iLeft < iRight)
+        } // while (middle loop)
+    } // while (outer loop)
+    arysDoubleStackClean__()
+} // arysSortArray()
+
+void arysSortArray(Array aryToSort, int iArySize)
+{
+    arysSortArray(aryToSort, 0, (iArySize - 1))
+} // arysSortArray()
+
+
+Array aryToSort = create(10, 1)
+int iArySize = 0
+
+put(aryToSort, "One", iArySize, 0); iArySize++
+put(aryToSort, "Two", iArySize, 0); iArySize++
+put(aryToSort, "Three", iArySize, 0); iArySize++
+put(aryToSort, "Four", iArySize, 0); iArySize++
+put(aryToSort, "Five", iArySize, 0); iArySize++
+
+arysSortArray(aryToSort, iArySize)
+
+for i in 0:iArySize do
+{
+    print (string get(aryToSort, i, 0)) "\n"
+} // for
