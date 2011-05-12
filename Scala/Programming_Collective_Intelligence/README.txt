@@ -22,5 +22,5 @@ examples in the book.  Translations are done by Stephen Sloan and
 are Copyright 2010 Stephen Sloan.
 
 Code within the Programming Collective Intelligence folder that is
-written by Stephen Sloan is free software that you can redistribute 
-and/or modify under the terms as the O'Reilly license.
+written by Stephen Sloan can be redistributed and/or modified under
+the same terms as the O'Reilly license.
