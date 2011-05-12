@@ -74,8 +74,6 @@ def topMatches(prefs, person, n=5, similarity=sim_pearson):
     
 if __name__ == "__main__":
     person1 = "Lisa Rose"
-    person2 = "Gene Seymour"
+    person2 = "Toby"
     print "This is a test of \"sim_distance\" for %s and %s: " % (person1, person2),
     print sim_distance(critics, person1, person2)
-    print "This is a test of \"sim_pearson\" for %s and %s: " % (person2, person2),
-    print sim_pearson(critics, person1, person2)
