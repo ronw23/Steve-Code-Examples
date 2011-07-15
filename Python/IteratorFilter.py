@@ -116,6 +116,25 @@ class PetStore2(FilterablePetStore):
         return self.pets
 
 
+class PetStore3(FilterablePetStore):
+
+    def __init__(self, list_of_pets):
+        self.pets = list_of_pets
+
+    def all(self):
+	    self._filter = self.pets
+	    return self	
+
+    def __iter__(self):
+        for x in self._filter:
+            yield x
+
+    def filter(self, filter_func):
+        import itertools		
+        self._filter = itertools.ifilter(filter_func, self._filter)
+        return self
+
+
 if __name__ == "__main__":
     import cProfile
     import csv
@@ -136,4 +155,9 @@ if __name__ == "__main__":
     print ""
     pets2 = PetStore2(list_of_pets)
     cProfile.run('for pet in pets2.is_type(Cat).is_tabby().was_sold(): print pet.name')
+
+    print "### Profiling itertools for filtering ###"
+    print ""
+    pets3 = PetStore3(list_of_pets)
+    cProfile.run('for pet in pets3.all().is_type(Cat).is_tabby().was_sold(): print pet.name')
 
